@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.teste.model.Supplier" table="SUPPLIER" catalog="dbase">
+		<composite-id>
+			<key-property name="supplierCode" column="SUPPLIER_CODE" />
+			<key-property name="companyCode" column="COMPANY_CODE" />
+		</composite-id>
+
+		<property name="supplierName" type="string">
+			<column name="SUPPLIER_NAME" />
+		</property>
+
+		<property name="supplierAddress" type="string">
+			<column name="SUPPLIER_ADDRESS" />
+		</property>
+
+	</class>
+</hibernate-mapping>

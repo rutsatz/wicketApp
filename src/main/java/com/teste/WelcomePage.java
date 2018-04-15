@@ -11,6 +11,7 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
@@ -20,49 +21,42 @@ public class WelcomePage extends WebPage {
 
 	private static final long serialVersionUID = 1L;
 
-	private List<String> genderChoices = new ArrayList<>();
+	private String action;
 
 	public WelcomePage() {
+	}
 
-		genderChoices.add("Male");
-		genderChoices.add("Female");
-		UserModel userModel = new UserModel();
+	public WelcomePage(String action) {
 
-		Form<?> form = new Form<>("form");
+		this.action = action;
+		// add(new SamplePanel("panel"));
+		// add(new SamplePanel("panel1"));
 
-		final TextField<String> text = new TextField<>("text", new PropertyModel<String>(userModel, "name"));
-		text.setOutputMarkupId(true);
-		
-		final DropDownChoice<String> gender = new DropDownChoice<>("gender", new PropertyModel<String>(userModel, "gender"),
-				genderChoices);
-		gender.setOutputMarkupId(true);
+		addComponents();
 
-//		Button button = new Button("submit") {
-//			public void onSubmit() {
-//				super.onSubmit();
-//
-//			};
-//		};
+	}
 
-		AjaxButton ajaxButton = new AjaxButton("submit") {
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				super.onSubmit(target, form);
-				
-				text.setEnabled(false);
-				gender.setEnabled(false);
-				
-				target.add(text);
-				target.add(gender);
-				
-			}
-		};
-		
+	private void addComponents() {
+
+		Form<?> form = new Form<Object>("form");
+
+		Fragment fragment;
+
+		if (action.equalsIgnoreCase("view")) {
+			// 1. id do componente pai, que irá receber o conteúdo.
+			// 2. É o pedaço (fragment) que queremos injetar.
+			// 3. É onde o fragment está definido. Como definimos dentro de
+			// WelcomePage.html (a própria página), passamos a própria página.
+			fragment = new Fragment("container", "viewFragment", this);
+			fragment.add(new Label("label", new Model<String>("Hello World")));
+		} else {
+			fragment = new Fragment("container", "editFragment", this);
+			fragment.add(new TextField<String>("text", new Model<String>("Hello World")));
+		}
+
+		form.add(fragment);
+
 		add(form);
-
-		form.add(text);
-		form.add(gender);
-		form.add(ajaxButton);
 
 	}
 
